@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import NoConnectivityScreen from "../src/containers/presentation/NoConnectivityScreen";
-import QuestionsListScreen from "../src/containers/presentation/QuestionsListScreen";
-import NotFoundScreen from "../src/containers/presentation/NotFoundScreen";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  HashRouter,
+} from "react-router-dom";
+import NoConnectivityScreen from "../src/components/NoConnectivityScreen";
+
+import NotFoundScreen from "../src/components/NotFoundScreen";
+import Home from "../src/containers/presentation/Home";
+import QuestionsRoute from "../src/containers/presentation/QuestionsRoute";
 
 const App = (props) => {
   const [connectionStatus, setConnectionStatus] = useState("ONLINE");
@@ -27,13 +34,13 @@ const App = (props) => {
     <>
       {connectionStatus === "OFFLINE" && <NoConnectivityScreen />}
       {connectionStatus === "ONLINE" && (
-        <Router>
+        <Router basename="/">
           <Switch>
             <Route exact path="/">
-              <QuestionsListScreen />
+              <Home />
             </Route>
             <Route path="/questions">
-              <QuestionsListScreen />
+              <QuestionsRoute />
             </Route>
             <Route path="*">
               <NotFoundScreen />
