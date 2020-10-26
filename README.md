@@ -44,8 +44,3 @@ NOTE: Requires NodeJS installed (https://nodejs.org/en/)
 - [X] FREQ-05-002: This screen should remain visible as long as the device has no connection to the Internet. When a connection is regained then the user should be at the state where it was before. **CAVEAT: Needs Redux or a withConnectionCheck HOC on every screen to fully work on all screens**
 
 - [X] Added: Not Found URL Screen
-
-## Live Demo
-
-- Base URL: https://jtiagodev.github.io/followmybliss/#/
-- Sample Route: https://jtiagodev.github.io/followmybliss/#/questions?question_id=QUESTION_ID
