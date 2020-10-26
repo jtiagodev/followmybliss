@@ -1,25 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  HashRouter,
+} from "react-router-dom";
+import NoConnectivityScreen from "../src/components/NoConnectivityScreen";
 
-function App() {
+import NotFoundScreen from "../src/components/NotFoundScreen";
+import Home from "../src/containers/presentation/Home";
+import QuestionsRoute from "../src/containers/presentation/QuestionsRoute";
+
+const App = (props) => {
+  const [connectionStatus, setConnectionStatus] = useState("ONLINE");
+
+  useEffect(() => {
+    const setOffline = (event) => {
+      setConnectionStatus("OFFLINE");
+    };
+    const setOnline = (event) => {
+      setConnectionStatus("ONLINE");
+    };
+    window.addEventListener("offline", setOffline);
+    window.addEventListener("online", setOnline);
+
+    return function cleanup() {
+      window.removeEventListener("online", setOnline);
+      window.removeEventListener("offline", setOffline);
+    };
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {connectionStatus === "OFFLINE" && <NoConnectivityScreen />}
+      {connectionStatus === "ONLINE" && (
+        <Router basename="/">
+          <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route path="/questions">
+              <QuestionsRoute />
+            </Route>
+            <Route path="*">
+              <NotFoundScreen />
+            </Route>
+          </Switch>
+        </Router>
+      )}
+    </>
   );
-}
+};
 
 export default App;
