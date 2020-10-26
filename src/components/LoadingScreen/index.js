@@ -5,9 +5,7 @@ const LoadingScreen = (props) => {
   const { loadText = "Loading Data..." } = props;
 
   return (
-  <div>
   <span>{loadText}</span>
-  </div>
   
   );
 };
