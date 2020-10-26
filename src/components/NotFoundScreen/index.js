@@ -6,10 +6,10 @@ const NotFoundScreen = (props) => {
     const navigateHome = () => history.push('/', { from: 'notfound' });
 
   return (
-    <>
-      <span>NOT FOUND SCREEN</span>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <span>404 SCREEN NOT FOUND</span>
       <button onClick={navigateHome}>Go to Home</button>
-    </>
+    </div>
   );
 };
 

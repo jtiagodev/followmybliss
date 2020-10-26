@@ -1,12 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
 import moment from 'moment';
+import { useHistory, useLocation } from "react-router-dom";
+import { QuestionPreviewContainer } from "./styled";
 
 const QuestionPreview = (props) => {
-  const { id, question, thumb_url, published_at, choices } = props;
+
+  const { id, question, image_url, thumb_url, published_at, choices } = props;
+  const history = useHistory();
 
   return (
-    <div
+    <QuestionPreviewContainer
+      onClick={() => {
+        history.push('/questions?question_id=' + id, { from: window.location.pathname + window.location.search, details: { id, question, image_url, thumb_url, published_at, choices } })
+      }}
       style={{
         display: "flex",
         flex: 5,
@@ -21,7 +28,7 @@ const QuestionPreview = (props) => {
       <span>{question}</span>
       <span>{`Published ${moment(published_at).format('DD-MM-YYYY HH:mm')}`}</span>
       <span>{`${choices.length} choices`}</span>
-    </div>
+    </QuestionPreviewContainer>
   );
 };
 
