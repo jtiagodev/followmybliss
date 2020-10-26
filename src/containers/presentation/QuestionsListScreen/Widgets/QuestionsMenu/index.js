@@ -19,9 +19,9 @@ const QuestionsMenu = (props) => {
       >
         More Questions
       </button>
-      {filterParam && shareableLink && (
+      {((filterParam === '' || filterParam) && shareableLink) ? (
         <button onClick={() => setShareScreen(!shareScreen)}>Share</button>
-      )}
+      ) : (null)}
     </Flex>
   );
 };
