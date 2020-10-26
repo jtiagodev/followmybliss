@@ -1,8 +1,9 @@
 import React from 'react';
-
+import styled from 'styled-components';
+import {WarningText} from './../Text';
 const NoConnectivityScreen = (props) => {
     return (
-        <span>NO CONNECTION SCREEN</span>
+        <WarningText>NO CONNECTION</WarningText>
     )
 };
 

@@ -23,7 +23,6 @@ const Home = (props) => {
   const serverHealthCheck = async () => {
     try {
       const result = await axios.get(BASE_URL + "/health");
-      // TODO: trigger a toast
       switch (result.status) {
         case 200:
           serverHealthOk();

@@ -2,11 +2,15 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { Flex } from "../../../components/Grid";
 import LoadingScreen from "../../../components/LoadingScreen";
 import RetryActionWidget from "../../../components/RetryActionWidget";
 import ShareScreen from "../../../components/ShareScreen";
+import { Title } from "../../../components/Text";
 import { BASE_URL } from "../../../config/api";
-import QuestionPreview from "./Widgets/QuestionPreview";
+import QuestionsSearch from "./Widgets/QuestionsSearch";
+import QuestionsList from "./Widgets/QuestionsList";
+import QuestionsMenu from "./Widgets/QuestionsMenu";
 
 const QuestionsListScreen = (props) => {
   const { filterParam } = props;
@@ -73,13 +77,6 @@ const QuestionsListScreen = (props) => {
     }
   };
 
-  // -- DEPRECATED: Not considered within Functional Req.
-  // const filterQuestions = (search) => {
-  //   const isIncluded = (question) => question.toLowerCase().includes(search);
-  //   const filteredQuestions = R.filter(isIncluded, questionsList);
-  //   setQuestionsFilterList(filteredQuestions);
-  // };
-
   useEffect(() => {
     // Fetch additional questions
     if (offset !== initialOffset) {
@@ -106,70 +103,51 @@ const QuestionsListScreen = (props) => {
     return <RetryActionWidget error={questionsError} onRetry={getQuestions} />;
   }
 
+  const filterInputChange = (evt) => {
+    setFilter(evt.target.value);
+  };
+
+  if (shareScreen && shareableLink) {
+    return <ShareScreen url={shareableLink} />;
+  }
   // Renders both variants
   return (
     <>
-      {shareScreen && shareableLink && <ShareScreen url={shareableLink} />}
-
-      {!shareScreen && (
-        <>
-          {(filterParam || filterParam === "") && (
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span>Questions Search Variant</span>
-
-              <div style={{ display: "flex", flexDirection: "row" }}>
-                <input
-                  type="text"
-                  name="filter"
-                  value={filter}
-                  autoFocus={filterParam === ""}
-                  ref={searchRef}
-                  onChange={(evt) => setFilter(evt.target.value)}
-                  onKeyDown={handleEnterPress}
-                />
-                <button disabled={loadQuestions} onClick={filterPress}>
-                  FILTER
-                </button>
-                <button onClick={dismissPress}>Dismiss</button>
-              </div>
-            </div>
-          )}
-
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            {!filterParam && <span>Questions List Variant</span>}
-            {loadQuestions && questionsList.length === 0 ? (
-              <LoadingScreen loadText="Loading Questions..." />
-            ) : (
-              <ul>
-                {questionsList.map((question, i) => (
-                  <li key={`question-preview-${i}`}>
-                    <QuestionPreview {...question} />
-                  </li>
-                ))}
-              </ul>
-            )}
-            {loadQuestions && questionsList.length > 0 ? (
-              <LoadingScreen loadText="Loading Additional Questions..." />
-            ) : (
-              <span>{`${questionsList.length} Results`}</span>
-            )}
-
-            <div style={{ display: "flex", flexDirection: "row" }}>
-              <button
-                disabled={loadQuestions}
-                onClick={() => fetchAdditionalQuestions()}
-              >
-                More Questions
-              </button>
-              {filterParam && shareableLink && (
-                <button onClick={() => setShareScreen(!shareScreen)}>
-                  Share
-                </button>
-              )}
-            </div>
-          </div>
-        </>
+      {(filterParam || filterParam === "") && (
+        <QuestionsSearch
+          filter={filter}
+          filterParam={filterParam}
+          searchRef={searchRef}
+          filterInputChange={filterInputChange}
+          handleEnterPress={handleEnterPress}
+          loadQuestions={loadQuestions}
+          filterPress={filterPress}
+          dismissPress={dismissPress}
+        />
       )}
+
+      <Flex column>
+        {!filterParam && filterParam !== "" && <Title>Questions List Variant</Title>}
+        {loadQuestions && questionsList.length === 0 ? (
+          <LoadingScreen loadText="Loading Questions..." />
+        ) : (
+          <QuestionsList questionsList={questionsList} />
+        )}
+        {loadQuestions && questionsList.length > 0 ? (
+          <LoadingScreen loadText="Loading Additional Questions..." />
+        ) : (
+          <span>{`${questionsList.length} Results Available`}</span>
+        )}
+
+        <QuestionsMenu
+          loadQuestions={loadQuestions}
+          fetchAdditionalQuestions={fetchAdditionalQuestions}
+          filterParam={filterParam}
+          shareableLink={shareableLink}
+          setShareScreen={setShareScreen}
+          shareScreen={shareScreen}
+        />
+      </Flex>
     </>
   );
 };

@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
-  HashRouter,
+  Route, Switch
 } from "react-router-dom";
 import NoConnectivityScreen from "../src/components/NoConnectivityScreen";
-
 import NotFoundScreen from "../src/components/NotFoundScreen";
 import Home from "../src/containers/presentation/Home";
 import QuestionsRoute from "../src/containers/presentation/QuestionsRoute";
+
 
 const App = (props) => {
   const [connectionStatus, setConnectionStatus] = useState("ONLINE");
@@ -34,7 +32,7 @@ const App = (props) => {
     <>
       {connectionStatus === "OFFLINE" && <NoConnectivityScreen />}
       {connectionStatus === "ONLINE" && (
-        <Router basename="/">
+        <Router>
           <Switch>
             <Route exact path="/">
               <Home />
