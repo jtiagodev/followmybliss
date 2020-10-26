@@ -41,6 +41,6 @@ NOTE: Requires NodeJS installed (https://nodejs.org/en/)
 - [X] FREQ-03-008: (Vote Button) should trigger an appropriate call to the API endpoint devoted to updating Questions
 - [X] FREQ-04-001: This screen must allow the users to share this content with others via email. **ASSUMPTION: through the share webservice**
 - [X] FREQ-05-001: The app must monitor connectivity with the Internet and show an appropriate screen whenever the connection is lost. 
-- [X] FREQ-05-002: This screen should remain visible as long as the device has no connection to the Internet. When a connection is regained then the user should be at the state where it was before. **CAVEAT: Needs Redux or a withConnectionCheck HOC on every screen to fully work on all screens**
+- [X] FREQ-05-002: This screen should remain visible as long as the device has no connection to the Internet. When a connection is regained then the user should be at the state where it was before. CAVEAT: Needs Redux or a withConnectionCheck HOC on every screen to work on every screen
 
 - [X] Added: Not Found URL Screen
