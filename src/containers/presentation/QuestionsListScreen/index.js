@@ -24,14 +24,18 @@ const QuestionsListScreen = (props) => {
   const [shareableLink, setShareableLink] = useState(undefined); // Required as we keep track of the URL that would generate the results being displayed and not necessarely the current filter values
   const [shareScreen, setShareScreen] = useState(false);
 
-  const getQuestions = async () => {
+  const getQuestions = async (resetQuestions = false) => {
     // If defined adds filter to params
     const questionsQueryParameters = {
       limit: fixedFetchLimit,
-      offset,
+      offset: resetQuestions ? 0 : offset,
     };
     if (filter) {
       questionsQueryParameters.filter = filter;
+    }
+    if (resetQuestions) {
+      setQuestionsList([]);
+      setOffset(0);
     }
 
     setLoadQuestions(true);
@@ -55,6 +59,20 @@ const QuestionsListScreen = (props) => {
     setOffset(newOffset);
   };
 
+  const dismissPress = () => {
+    history.push("/questions");
+  };
+
+  const filterPress = () => {
+    getQuestions(true);
+  };
+
+  const handleEnterPress = (event) => {
+    if (event.key === "Enter") {
+      filterPress();
+    }
+  };
+
   // -- DEPRECATED: Not considered within Functional Req.
   // const filterQuestions = (search) => {
   //   const isIncluded = (question) => question.toLowerCase().includes(search);
@@ -71,11 +89,15 @@ const QuestionsListScreen = (props) => {
 
   useEffect(() => {
     // Fetch 10 first results from API without Offset if questions_filter is not present
-    if (!filterParam) {
+    if (!filterParam && filterParam !== "") {
       getQuestions();
     }
     if (filterParam && filterParam !== "") {
       getQuestions();
+    }
+
+    if (filterParam && filterParam === "") {
+      searchRef.current.focus();
     }
   }, []);
 
@@ -91,47 +113,33 @@ const QuestionsListScreen = (props) => {
 
       {!shareScreen && (
         <>
-          {filterParam && (
-            <div style={{ display: 'flex', flexDirection: 'column'}}>
-                            <span>Questions Search Variant</span>
+          {(filterParam || filterParam === "") && (
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span>Questions Search Variant</span>
 
-            <div style={{ display: "flex", flexDirection: "row" }}>
-              <input
-                type="text"
-                name="filter"
-                value={filter}
-                autoFocus={filterParam === ""}
-                ref={searchRef}
-                onChange={(evt) => setFilter(evt.target.value)}
-              />
-              <button
-                disabled={loadQuestions}
-                onClick={() => {
-                  setOffset(0);
-                  setQuestionsList([]);
-                  getQuestions();
-                }}
-              >
-                FILTER ICO
-              </button>
-              <button
-                onClick={() => {
-                  history.push("/questions");
-                }}
-              >
-                Dismiss
-              </button>
+              <div style={{ display: "flex", flexDirection: "row" }}>
+                <input
+                  type="text"
+                  name="filter"
+                  value={filter}
+                  autoFocus={filterParam === ""}
+                  ref={searchRef}
+                  onChange={(evt) => setFilter(evt.target.value)}
+                  onKeyDown={handleEnterPress}
+                />
+                <button disabled={loadQuestions} onClick={filterPress}>
+                  FILTER
+                </button>
+                <button onClick={dismissPress}>Dismiss</button>
+              </div>
             </div>
-            </div>
-
           )}
 
-          
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              {!filterParam && (<span>Questions List Variant</span>)}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            {!filterParam && <span>Questions List Variant</span>}
             {loadQuestions && questionsList.length === 0 ? (
-            <LoadingScreen loadText="Loading Questions..." />
-          ) : (
+              <LoadingScreen loadText="Loading Questions..." />
+            ) : (
               <ul>
                 {questionsList.map((question, i) => (
                   <li key={`question-preview-${i}`}>
@@ -139,28 +147,27 @@ const QuestionsListScreen = (props) => {
                   </li>
                 ))}
               </ul>
-          )}
-              {loadQuestions && questionsList.length > 0 ? (
-                <LoadingScreen loadText="Loading Additional Questions..." />
-              ) : (
-                <span>{`${questionsList.length} Results`}</span>
-              )}
+            )}
+            {loadQuestions && questionsList.length > 0 ? (
+              <LoadingScreen loadText="Loading Additional Questions..." />
+            ) : (
+              <span>{`${questionsList.length} Results`}</span>
+            )}
 
-              <div style={{ display: "flex", flexDirection: "row" }}>
-                <button
-                  disabled={loadQuestions}
-                  onClick={() => fetchAdditionalQuestions()}
-                >
-                  More Questions
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <button
+                disabled={loadQuestions}
+                onClick={() => fetchAdditionalQuestions()}
+              >
+                More Questions
+              </button>
+              {filterParam && shareableLink && (
+                <button onClick={() => setShareScreen(!shareScreen)}>
+                  Share
                 </button>
-                {filterParam && shareableLink && (
-                  <button onClick={() => setShareScreen(!shareScreen)}>
-                    Share
-                  </button>
-                )}
-              </div>
+              )}
             </div>
-          
+          </div>
         </>
       )}
     </>

@@ -11,14 +11,14 @@ NOTE: Requires NodeJS installed (https://nodejs.org/en/)
 
 ## Functional Requirements
 
-- [ ] FREQ-01-001: loading screen while the server health is checked
-- [ ] FREQ-01-002: server health is checked via the appropriate endpoint
-- [ ] FREQ-01-003: server health is OK then the application should proceed to the “List Screen”
-- [ ] FREQ-01-004: server health is NOT OK then the application should display a “Retry Action” widget
-- [ ] FREQ-02-001: show the List Screen in two cases: loading screen managed to contact and check the server health **ASSUMPTION: and if server health is OK**
-- [ ] FREQ-02-002: show the List Screen in two cases: app was opened with an URL with the format http://HOST:PORT/questions?question_filter=FILTER
-- [ ] FREQ-02-003: query parameter which should be used to fill the search box and trigger the search functionality
-- [ ] FREQ-02-004: If the question_filter parameter is missing the user should simply be placed at the listing
+- [X] FREQ-01-001: loading screen while the server health is checked
+- [X] FREQ-01-002: server health is checked via the appropriate endpoint
+- [X] FREQ-01-003: server health is OK then the application should proceed to the “List Screen”
+- [X] FREQ-01-004: server health is NOT OK then the application should display a “Retry Action” widget
+- [X] FREQ-02-001: show the List Screen in two cases: loading screen managed to contact and check the server health **ASSUMPTION: and if server health is OK**
+- [X] FREQ-02-002: show the List Screen in two cases: app was opened with an URL with the format http://HOST:PORT/questions?question_filter=FILTER
+- [X] FREQ-02-003: query parameter which should be used to fill the search box and trigger the search functionality
+- [X] FREQ-02-004: If the question_filter parameter is missing the user should simply be placed at the listing
 - [ ] FREQ-02-005: If the question_filter parameter is present but has an empty value the user should be placed at the filter variant with no input inserted but with the input box focused.
 - [ ] FREQ-02-006: front-end application must fetch list data from the appropriate endpoint
 - [ ] FREQ-02-007: app should fetch 10 records at a time
@@ -45,5 +45,5 @@ NOTE: Requires NodeJS installed (https://nodejs.org/en/)
 
 ## Live Demo
 
-Base URL: https://jtiagodev.github.io/followmybliss/#/
-Sample Route: https://jtiagodev.github.io/followmybliss/#/questions?question_id=QUESTION_ID
+- Base URL: https://jtiagodev.github.io/followmybliss/#/
+- Sample Route: https://jtiagodev.github.io/followmybliss/#/questions?question_id=QUESTION_ID
